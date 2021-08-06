@@ -19,7 +19,7 @@ const User = ({children}) => {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
-                    'Access-Control-Allow-Origin': 'http://localhost:3000/'
+                    'Access-Control-Allow-Origin': '*'
                 },
                 body: form
             });
@@ -51,7 +51,7 @@ const User = ({children}) => {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
-                    'Access-Control-Allow-Origin': 'http://localhost:3000/'
+                    'Access-Control-Allow-Origin': '*'
                 },
                 body: form
             });
@@ -77,7 +77,7 @@ const User = ({children}) => {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
-                    'Access-Control-Allow-Origin': 'http://localhost:3000/'
+                    'Access-Control-Allow-Origin': '*'
                 },
                 body: form
             });

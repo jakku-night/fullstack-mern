@@ -12,9 +12,10 @@ const auth = require('./routes/index');
 const app = express();
 
 // Setup:
+
 app.set('port', process.env.PORT || 3000);
 var corsOptions = {
-    origin: 'http://localhost:3000/',
+    origin: '*',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(express.static(path.join(__dirname, 'public')));
@@ -27,7 +28,7 @@ app.use(WebpackDevMiddleware(webpack(webpack_config)));
 
 app.use(cors(corsOptions));
 app.use(fileupload());
-app.use(morgan());
+app.use(morgan('dev'));
 app.use((req, res, next) => {
     console.log(req.protocol.toUpperCase(), req.method.toLocaleUpperCase(), req.url);
     next();
