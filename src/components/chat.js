@@ -1,10 +1,17 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect, useContext } from 'react';
 const io = require('socket.io-client');
 const socket = io('/');
+import usercontext from '../contexts/usercontext';
 
 const Chat = () => {
     
+    const context = useContext(usercontext);
     const [log, setlog] = useState([]);
+    const [user, setuser] = useState(context.user);
+
+    useEffect(() => {
+        setuser(context.user);
+    });
 
     useEffect(() => {
         console.log('Mounting...');
@@ -23,22 +30,30 @@ const Chat = () => {
         console.log('Sending...');
         const input = document.getElementById('msg');
         event.preventDefault();
-        socket.emit('msg', input.value);
+        const data = {
+            message: input.value,
+            username: user.username
+        };
+        socket.emit('msg', JSON.stringify(data));
         console.log('Sent');
         input.value = '';
     };
 
-    return (
-        <Fragment>
-            <div id="chat" border="1">
-                {log.map((msg, key) => (
-                    <p key={key}>{msg.id}: {msg.msg}</p>
-                ))}
-            </div>
-            <input type="text" id="msg" />
-            <button id="send" onClick={send}>Send</button>
-        </Fragment>
-    );
+    if(user.id != ''){
+        return (
+            <Fragment>
+                <div id="chat" border="1">
+                    {log.map((msg, key) => (
+                        <p key={key}>{msg.username}: {msg.message}</p>
+                    ))}
+                </div>
+                <input type="text" id="msg" />
+                <button id="send" onClick={send}>Send</button>
+            </Fragment>
+        );
+    }else{
+        return (<Fragment></Fragment>);
+    }
 };
 
 export default Chat;

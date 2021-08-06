@@ -6,13 +6,15 @@ const webpack = require('webpack');
 const WebpackDevMiddleware = require('webpack-dev-middleware');
 const path = require('path');
 const webpack_config = require('./webpack.config');
+const morgan = require('morgan');
+const auth = require('./routes/index');
 
 const app = express();
 
 // Setup:
 app.set('port', process.env.PORT || 3000);
 var corsOptions = {
-    origin: '*',
+    origin: 'http://localhost:3000/',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(express.static(path.join(__dirname, 'public')));
@@ -25,8 +27,15 @@ app.use(WebpackDevMiddleware(webpack(webpack_config)));
 
 app.use(cors(corsOptions));
 app.use(fileupload());
+app.use(morgan());
+app.use((req, res, next) => {
+    console.log(req.protocol.toUpperCase(), req.method.toLocaleUpperCase(), req.url);
+    next();
+});
 
 // Routes:
+
+app.use(auth);
 
 // Startup:
 
@@ -43,11 +52,8 @@ io.on('connection', (socket) => {
     console.log('New Connection:', socket.id);
     var message = {};
     socket.on('msg', (msg) => {
-        console.log(socket.id + ': ' + msg);
-        message = {
-            id: socket.id,
-            msg: msg
-        };
+        console.log(JSON.parse(msg));
+        message = JSON.parse(msg);
         console.log(message);
         if(message != {}){
             io.emit('msg', JSON.stringify(message));

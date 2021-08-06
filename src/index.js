@@ -1,12 +1,18 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import Chat from './components/chat';
+import User from './components/user';
+import Navbar from './components/navbar';
+import Login from './components/login';
 
 const App = () => {
     return (
         <Fragment>
-            <h1>React works!</h1>
-            <Chat />
+            <User>
+                <Navbar />
+                <Login />
+                <Chat />
+            </User>
         </Fragment>
     );
 };
